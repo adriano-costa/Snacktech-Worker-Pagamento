@@ -6,13 +6,13 @@ until /opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Passwo
   sleep 1
 done
 
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "CREATE DATABASE PedidoDB;"
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE PedidoDB; CREATE TABLE [dbo].[Pedidos] ( Id UNIQUEIDENTIFIER PRIMARY KEY, DataCriacao DATETIME2(7) NOT NULL, UltimaAtualizacao DATETIME2(7) NOT NULL, Status INT NOT NULL );"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "CREATE DATABASE SnackTechOrderDb;"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE SnackTechOrderDb; CREATE TABLE [dbo].[Pedidos] ( Id UNIQUEIDENTIFIER PRIMARY KEY, DataCriacao DATETIME2(7) NOT NULL, Status INT NOT NULL, PagamentoId UNIQUEIDENTIFIER);"
 
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE PedidoDB; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, UltimaAtualizacao, Status) VALUES ('6c5250e1-5843-42b9-bce7-224f0cbf01a9', '2025-01-01 00:00:00', '2025-01-01 00:00:00', 0);"
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE PedidoDB; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, UltimaAtualizacao, Status) VALUES ('e0882757-1bda-4884-9861-ba8d9e2e7869', '2025-01-01 00:00:00', '2025-01-01 00:00:00', 1);"
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE PedidoDB; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, UltimaAtualizacao, Status) VALUES ('e099fd40-28fa-4ed2-8d69-bd7719cc45da', '2025-01-01 00:00:00', '2025-01-01 00:00:00', 3);"
-/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE PedidoDB; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, UltimaAtualizacao, Status) VALUES ('ff1fe84a-0998-49ec-b0aa-264796a3fc3d', '2025-01-01 00:00:00', '2025-01-01 00:00:00', 4);"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE SnackTechOrderDb; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, Status) VALUES ('6c5250e1-5843-42b9-bce7-224f0cbf01a9', '2025-01-01 00:00:00', 1);"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE SnackTechOrderDb; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, Status) VALUES ('e0882757-1bda-4884-9861-ba8d9e2e7869', '2025-01-01 00:00:00', 2);"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE SnackTechOrderDb; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, Status) VALUES ('e099fd40-28fa-4ed2-8d69-bd7719cc45da', '2025-01-01 00:00:00', 2);"
+/opt/mssql-tools/bin/sqlcmd -S sql-server-local -U sa -P YourStrong@Password123 -Q "USE SnackTechOrderDb; INSERT INTO [dbo].[Pedidos] (Id, DataCriacao, Status, PagamentoId) VALUES ('ff1fe84a-0998-49ec-b0aa-264796a3fc3d', '2025-01-01 00:00:00', 3, 'ff1fe84a-0998-49ec-b0aa-264796a3f23d');"
 
 echo "Database seed complete."
 

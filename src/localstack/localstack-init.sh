@@ -2,7 +2,7 @@
 
 echo "Running LocalStack initialization..."
 
-awslocal sqs create-queue --queue-name atualizar-pedido.fifo --attributes 'FifoQueue=true, ContentBasedDeduplication=true' 
-awslocal sqs create-queue --queue-name atualizar-pedido-dlq
+awslocal sqs create-queue --queue-name snacktech-processed-payments 
+awslocal sqs create-queue --queue-name snacktech-processed-payments-dlq
 
 echo "LocalStack initialization complete."

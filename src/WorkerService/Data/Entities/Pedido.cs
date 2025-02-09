@@ -6,6 +6,6 @@ public class Pedido
 {
     public Guid Id { get; set; }
     public DateTime DataCriacao { get; set; }
-    public DateTime UltimaAtualizacao { get; set; }
-    public StatusPedido Status { get; set; }
+    public int Status { get; set; }
+    public Guid? PagamentoId { get; set; }
 }

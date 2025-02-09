@@ -1,56 +1,39 @@
 using WorkerService.Data.Entities;
 using WorkerService.Data.Repository;
 using WorkerService.DTOs;
-using WorkerService.Enums;
 
 namespace WorkerService.Handlers {
     public class PedidoHandler : IPedidoHandler
     {
-        private readonly IPedidoRepository _pedidoRepository;
+        private readonly ILogger<PedidoHandler> logger;
+        private readonly IPedidoRepository pedidoRepository;
 
-        public PedidoHandler(IPedidoRepository pedidoRepository)
+        public PedidoHandler(ILogger<PedidoHandler> logger, IPedidoRepository pedidoRepository)
         {
-            _pedidoRepository = pedidoRepository;
+            this.logger = logger;
+            this.pedidoRepository = pedidoRepository;
         }
 
         public async Task ProcessarPedidoAsync(MensagemPedidoDto mensagem)
         {
-            try
+            Pedido? pedido = await pedidoRepository.GetByIdAsync(mensagem.PedidoId);
+
+            if (pedido == null)
             {
-                // Fetch the current state of the pedido from the database
-                Pedido pedido = await _pedidoRepository.GetByIdAsync(mensagem.PedidoId);
-
-                if (pedido == null)
-                {
-                    // If the PedidoID does not exist in the database, throw an exception
-                    throw new InvalidOperationException($"Pedido with ID {mensagem.PedidoId} not found.");
-                }
-
-                // Validate the message and update logic
-                if (mensagem.DataModificacao < pedido.UltimaAtualizacao)
-                {
-                    // If DataModificacao in the message is before UltimaAtualizacao, throw an exception
-                    throw new InvalidOperationException($"DataModificacao in the message is older than UltimaAtualizacao for Pedido with ID {mensagem.PedidoId}.");
-                }
-
-                if (!Enumerable.Contains((StatusPedido[])Enum.GetValues(typeof(StatusPedido)), (StatusPedido)mensagem.StatusPedido)){
-                    // If StatusPedido in the message is not valid, throw an exception
-                    throw new InvalidOperationException($"StatusPedido in the message is invalid for Pedido with ID {mensagem.PedidoId}.");
-                }
-
-                // Update the pedido if validations pass
-                pedido.Status = (StatusPedido)mensagem.StatusPedido;
-                pedido.UltimaAtualizacao = mensagem.DataModificacao;
-
-                // Persist the updated pedido back to the database
-                await _pedidoRepository.UpdateAsync(pedido);
+                throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} não encontrado.");
             }
-            catch (Exception ex)
+
+            // TODO: trocar numero magico
+            if (pedido.Status != 2)
             {
-                // Log the exception and rethrow it
-                Console.WriteLine($"Error processing pedido: {ex.Message}");
-                throw;
+                throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} não está aguardando pagamento.");
             }
+            
+            // TODO: trocar numero magico
+            pedido.Status = 3;
+            pedido.PagamentoId = mensagem.PagamentoId;
+
+            await pedidoRepository.UpdateAsync(pedido);
         }
     }
 }
